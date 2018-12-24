@@ -517,6 +517,21 @@ class TestWorkflowActivityStream(helpers.FunctionalTestBase):
         exp = 'made changes and requested a review for dataset <span><a href="/dataset/{0}">{0}</a></span>'
         assert exp.format(self.package['name']) in resp
 
+    @mock.patch('ckanext.ed.mailer.mail_user')
+    @mock.patch('ckanext.ed.mailer.render_jinja2')
+    def test_make_sure_approval_state_not_visible_in_normal_activity_stream(self, mock_jinja2, mock_mail_user):
+        app = self._get_test_app()
+        extra_environ = {'REMOTE_USER': 'george'}
+        app.get(url=url_for(
+                    '/dataset-publish/{0}/approve'.format(self.package['id'])),
+                    extra_environ=extra_environ)
+        extra_environ = {'REMOTE_USER': 'john'}
+        resp = app.get(url=url_for(
+            '/dataset/activity/{0}?id={1}'.format(self.package['name'], self.package['id']),
+        ),extra_environ=extra_environ)
+        assert 'approval_state' not in resp
+
+
 def _create_dataset_dict(package_name, office_name='us-ed', private=False):
     return {
         'name': package_name,

@@ -9,6 +9,7 @@ from ckan.lib.mailer import MailerException
 from ckan.logic.action.create import package_create as core_package_create
 from ckan.logic.action.get import package_show as core_package_show
 from ckan.logic.action.get import package_activity_list as core_package_activity_list
+from ckan.logic.action.get import activity_detail_list as core_activity_detail_list
 from ckan.plugins import toolkit
 
 from ckanext.ed import helpers
@@ -182,5 +183,12 @@ def package_activity_list(context, data_dict):
         a for a in full_list if 'workflow_activity' in a.get('data', {})]
     normal_activities = [
         a for a in full_list if 'workflow_activity' not in a.get('data', {})]
+    # Filter out the activities that are related `approval_state`
+    normal_activities = list(filter(
+        lambda activity: core_activity_detail_list(
+            context, {'id': activity['id']}).pop()
+            .get('data', {})
+            .get('package_extra', {})
+            .get('key') != 'approval_state', normal_activities))
     return (workflow_activities
         if get_workflow_activities else normal_activities)
