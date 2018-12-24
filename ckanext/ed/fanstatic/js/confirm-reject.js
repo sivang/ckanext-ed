@@ -45,7 +45,7 @@ this.ckan.module('reject', function (jQuery) {
       // create a form and submit it to confirm the deletion
       var feedback = this.modal.find('#feedback').val();
       var form = jQuery('<form/>', {
-        action: this.el.attr('href') + '?feedback="' + feedback + '"',
+        action: this.el.attr('href') + '?feedback=' + feedback,
         method: 'POST',
       });
       form.appendTo('body').submit();
