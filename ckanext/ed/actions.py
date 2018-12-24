@@ -7,9 +7,12 @@ import zipfile
 from ckan.controllers.admin import get_sysadmins
 from ckan.lib.mailer import MailerException
 from ckan.logic.action.create import package_create as core_package_create
-from ckan.logic.action.get import package_show as core_package_show
-from ckan.logic.action.get import package_activity_list as core_package_activity_list
 from ckan.logic.action.get import activity_detail_list as core_activity_detail_list
+from ckan.logic.action.get import dashboard_activity_list as core_dashboard_activity_list
+from ckan.logic.action.get import group_activity_list as core_group_activity_list
+from ckan.logic.action.get import package_activity_list as core_package_activity_list
+from ckan.logic.action.get import package_show as core_package_show
+from ckan.logic.action.get import recently_changed_packages_activity_list as core_recently_changed_packages_activity_list
 from ckan.plugins import toolkit
 
 from ckanext.ed import helpers
@@ -192,3 +195,27 @@ def package_activity_list(context, data_dict):
             .get('key') != 'approval_state', normal_activities))
     return (workflow_activities
         if get_workflow_activities else normal_activities)
+
+
+@toolkit.side_effect_free
+def dashboard_activity_list(context, data_dict):
+    full_list = core_dashboard_activity_list(context, data_dict)
+    normal_activities = [
+        a for a in full_list if 'workflow_activity' not in a.get('data', {})]
+    return normal_activities
+
+
+@toolkit.side_effect_free
+def group_activity_list(context, data_dict):
+    full_list = core_group_activity_list(context, data_dict)
+    normal_activities = [
+        a for a in full_list if 'workflow_activity' not in a.get('data', {})]
+    return normal_activities
+
+
+@toolkit.side_effect_free
+def recently_changed_packages_activity_list(context, data_dict):
+    full_list = core_recently_changed_packages_activity_list(context, data_dict)
+    normal_activities = [
+        a for a in full_list if 'workflow_activity' not in a.get('data', {})]
+    return normal_activities

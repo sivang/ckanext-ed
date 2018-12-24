@@ -33,7 +33,10 @@ class EDPlugin(plugins.SingletonPlugin, DefaultTranslation):
             'ed_prepare_zip_resources': actions.prepare_zip_resources,
             'package_create': actions.package_create,
             'package_show': actions.package_show,
-            'package_activity_list': actions.package_activity_list
+            'package_activity_list': actions.package_activity_list,
+            'dashboard_activity_list': actions.dashboard_activity_list,
+            'group_activity_list': actions.group_activity_list,
+            'recently_changed_packages_activity_list': actions.recently_changed_packages_activity_list
         }
 
     # IPackageController
