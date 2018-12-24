@@ -22,6 +22,7 @@ class WorkflowActivityStreamController(base.BaseController):
         }
         data_dict = {'id': id}
         try:
+            toolkit.check_access('package_update', context, data_dict)
             toolkit.c.pkg_dict = toolkit.get_action('package_show')(context, data_dict)
             toolkit.c.pkg = context['package']
             toolkit.c.package_activity_stream = toolkit.get_action(
