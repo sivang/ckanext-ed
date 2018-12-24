@@ -529,7 +529,7 @@ class TestWorkflowActivityStream(helpers.FunctionalTestBase):
         resp = app.get(url=url_for(
             '/dataset/activity/{0}?id={1}'.format(self.package['name'], self.package['id']),
         ),extra_environ=extra_environ)
-        assert 'approval_state' not in resp
+        assert 'approval_state' not in resp, resp
 
 
 def _create_dataset_dict(package_name, office_name='us-ed', private=False):
